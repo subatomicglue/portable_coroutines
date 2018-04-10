@@ -179,7 +179,6 @@ TODO:
 
 <h2> license </h2>
 ```
-/*
    c++ coroutines - example of cooperative threading w/ Microfiber impl
    Copyright (c) 2008 kevin meinert all rights reserved
 
@@ -197,6 +196,5 @@ TODO:
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
    02110-1301  USA
-*/
 ```
 
