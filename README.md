@@ -168,14 +168,18 @@ for systems where impossible to provide the POSIX swapcontext routines,
 the Microfiber implementation inside `main-jmp.cpp` (which depends only on standard C's `setjmp`/`longjump`) can be fixed with stack save/restore routines.  Write these in machine specific assembly, or try looking at the WIN32 ucontext directory for inspiration - they use the system's threading calls to save/load the stack
    (i.e. `Set`/`GetThreadContext` on `WIN32`)
 
-## CONTACT / PULL REQUESTS / HELP WANTED</h2>
-
 Please bang on this.  Submit pull requests.  Disscuss in the issue tracker.
 
 TODO:
-- The 64bit windows version needs work, stack manip
+- The 64bit windows version needs implementation, asm version (see `libthread` for x64 flavors for other OSs for inspiration)
 - Proper cmake build system needed
-
+- `uc_link` isn't implemented in the `libtask` version of `ucontext`, for proper return handling from the task.  (see `win32` version for inspiration)
+- integrate / unify `libthread` and `libtask` and win32 `ucontext` directories into one portable `ucontext` implementation.   Maybe remove whatever POSIX group hates about it's API (they did deprecate it), probably the varargs on makecontext :)
+- testing on multiple systems, 32 vs 64bit on each.
+  - Windows 32/64
+  - MacOSX 32/64
+  - Linux 32/64 (Ubuntu, etc.)
+  - others...
 
 ## license
 ```
