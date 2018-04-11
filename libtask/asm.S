@@ -28,8 +28,20 @@
 #endif
 #endif
 
+#if defined(__linux__) && defined(__amd64__)
+#define NEEDAMD64CONTEXT 1
+#define SET setmcontext
+#define GET getmcontext
+#endif
+
 #if defined(__linux__) && defined(__arm__)
 #define NEEDARMCONTEXT 1
+#define SET setmcontext
+#define GET getmcontext
+#endif
+
+#if defined(__linux__) && defined(__mips__)
+#define NEEDMIPSCONTEXT 1
 #define SET setmcontext
 #define GET getmcontext
 #endif
@@ -125,7 +137,7 @@ GET:
 	movq	%rcx, 160(%rdi)
 	leaq	8(%rsp), %rcx	/* %rsp */
 	movq	%rcx, 184(%rdi)
-	
+
 	movq	32(%rdi), %rcx	/* restore %rcx */
 	movq	$0, %rax
 	ret
@@ -257,4 +269,64 @@ SET:
 	ldr	r14, [r0,#56]
 	ldr	r0, [r0]
 	mov	pc, lr
+#endif
+
+#ifdef NEEDMIPSCONTEXT
+.globl GET
+GET:
+	sw	$4, 24($4)
+	sw	$5, 28($4)
+	sw	$6, 32($4)
+	sw	$7, 36($4)
+
+	sw	$16, 72($4)
+	sw	$17, 76($4)
+	sw	$18, 80($4)
+	sw	$19, 84($4)
+	sw	$20, 88($4)
+	sw	$21, 92($4)
+	sw	$22, 96($4)
+	sw	$23, 100($4)
+
+	sw	$28, 120($4)	/* gp */
+	sw	$29, 124($4)	/* sp */
+	sw	$30, 128($4)	/* fp */
+	sw	$31, 132($4)	/* ra */
+
+	xor	$2, $2, $2
+	j	$31
+	nop
+
+.globl SET
+SET:
+	lw	$16, 72($4)
+	lw	$17, 76($4)
+	lw	$18, 80($4)
+	lw	$19, 84($4)
+	lw	$20, 88($4)
+	lw	$21, 92($4)
+	lw	$22, 96($4)
+	lw	$23, 100($4)
+
+	lw	$28, 120($4)	/* gp */
+	lw	$29, 124($4)	/* sp */
+	lw	$30, 128($4)	/* fp */
+
+	/* 
+	 * If we set $31 directly and j $31, 
+	 * we would loose the outer return address.
+	 * Use a temporary register, then.
+	 */
+	lw	$8, 132($4)		/* ra */
+
+	/*  bug: not setting the pc causes a bus error */
+	lw	$25, 132($4)	/* pc */
+
+	lw	$5, 28($4)
+	lw	$6, 32($4)
+	lw	$7, 36($4)
+	lw	$4, 24($4)
+
+	j	$8
+	nop
 #endif
