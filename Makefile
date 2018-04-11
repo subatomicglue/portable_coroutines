@@ -1,9 +1,9 @@
 all:
 	rm -f core.*
-	g++ -DTEST1 -ggdb main.cpp -o a
-	g++ -DTEST2 -ggdb main.cpp -o a2
-	g++ -ggdb main-jmp.cpp -o jmp
-	g++ -ggdb ucontext_test.cpp -o ucontext_test
+	g++ -D_XOPEN_SOURCE -DTEST1 -ggdb main.cpp -o a
+	g++ -D_XOPEN_SOURCE -DTEST2 -ggdb main.cpp -o a2
+	g++ -D_XOPEN_SOURCE -ggdb main-jmp.cpp -o jmp
+	g++ -D_XOPEN_SOURCE -ggdb ucontext_test.cpp -o ucontext_test
 
 tarball:
 	make clean
