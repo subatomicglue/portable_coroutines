@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <assert.h>
-#include <ucontext.h> // set/get/make/swapcontext posix functions
+//#include <ucontext.h> // set/get/make/swapcontext posix functions
 
 class Microfiber
 {

@@ -39,6 +39,7 @@ the code *should* be portable to any POSIX compliant system, though not all unix
 the code has been tested under:
 - WinXP SP3 32bit using vc++ 2005
 - Linux 32bit and 64bit using gcc
+- MacOSX 32bit and 64bit using clang's gcc/g++ aliases (clang-900.0.39.2)
 
 NOTE: POSIX group _has_ deprecated ucontext, however, there is no replacement in the wild!  We have (here in the repo) source for `ucontext`, derived from Russ Cox @ MIT's version from Plan9 `libthread` and his `libtask` as well as xdoukas's win32 `ucontext`.  Several platforms supported for `ucontext` through these efforts.
 
