@@ -176,6 +176,7 @@ Please bang on this.  Submit pull requests.  Disscuss in the issue tracker.
 TODO:
 - The 64bit windows version needs implementation, asm version (see `libthread` for x64 flavors for other OSs for inspiration)
 - Proper cmake build system needed
+  - cross compiling to Win32 from Mac/Linux would be nice [see this toolchain](https://github.com/subatomicglue/cross-compile-macosx-clang-windows-msvc) which could be used.
 - `uc_link` isn't implemented in the `libtask` version of `ucontext`, for proper return handling from the task.  (see `win32` version for inspiration)
 - integrate / unify `libthread` and `libtask` and win32 `ucontext` directories into one portable `ucontext` implementation.   Maybe remove whatever POSIX group hates about it's API (they did deprecate it), probably the varargs on makecontext :)
 - testing on multiple systems, 32 vs 64bit on each.
