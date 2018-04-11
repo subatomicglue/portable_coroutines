@@ -40,6 +40,8 @@ the code has been tested under:
 - WinXP SP3 32bit using vc++ 2005
 - Linux 32bit and 64bit using gcc
 
+NOTE: POSIX group _has_ deprecated ucontext, however, there is no replacement in the wild!  We have (here in the repo) source for `ucontext`, derived from Russ Cox @ MIT's version from Plan9 `libthread` and his `libtask` as well as xdoukas's win32 `ucontext`.  Several platforms supported for `ucontext` through these efforts.
+
 ## what does it look like?
 ```
 static void Fiber(size_t arg)
