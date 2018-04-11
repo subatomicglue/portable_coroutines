@@ -1,9 +1,11 @@
 all:
 	rm -f core.*
-	g++ -D_XOPEN_SOURCE -DTEST1 -ggdb main.cpp -o a
-	g++ -D_XOPEN_SOURCE -DTEST2 -ggdb main.cpp -o a2
-	g++ -D_XOPEN_SOURCE -ggdb main-jmp.cpp -o jmp
-	g++ -D_XOPEN_SOURCE -ggdb ucontext_test.cpp -o ucontext_test
+	gcc -D_XOPEN_SOURCE -ggdb -c libtask/asm.s -o asm.o
+	gcc -D_XOPEN_SOURCE -ggdb -c libtask/context.c -o context.o
+	g++ -D_XOPEN_SOURCE -DTEST1 -ggdb -Ilibtask main.cpp asm.o context.o -o a
+	g++ -D_XOPEN_SOURCE -DTEST2 -ggdb -Ilibtask main.cpp asm.o context.o -o a2
+	g++ -D_XOPEN_SOURCE -ggdb -Ilibtask main-jmp.cpp asm.o context.o -o jmp
+	g++ -D_XOPEN_SOURCE -ggdb -Ilibtask ucontext_test.cpp asm.o context.o -o ucontext_test
 
 tarball:
 	make clean

@@ -11,13 +11,17 @@
 #ifdef WIN32
    // local version
 #  include "ucontext/ucontext.h"
-   // #defined in windows.h, conflicts with Microfiber::Yield
 #  ifdef Yield
 #     undef Yield
 #  endif
+#elif defined(USE_NATIVE_UCONTEXT) && !defined(__APPLE__)
+   // system version
+#  include <ucontext.h> // coredumps on APPLE... :(
 #else
-   // installed system version (i.e. linux)
-#  include <ucontext.h>
+extern "C"
+{
+#  include "taskimpl.h"
+}
 #endif
 
 
@@ -59,8 +63,12 @@ public:
       getcontext( &mFuncJmp );
       mFuncJmp.uc_stack.ss_sp = st1;
       mFuncJmp.uc_stack.ss_size = sizeof st1;
-      mFuncJmp.uc_link = &mMainJmp;
-      makecontext(&mFuncJmp, (FunctionCast)fn, 1, arg);
+      //mFuncJmp.uc_link = &mMainJmp;
+      uint64_t z = arg;
+      uint32_t y = z;
+      z >>= 16;	/* hide undefined 32-bit shift from 32-bit compilers */
+      uint32_t x = z>>16;
+      makecontext(&mFuncJmp, (FunctionCast)fn, 2, y, x);
    }
 
    /// Yield is to be called from within a running Fiber
@@ -81,14 +89,22 @@ public:
       switch (mState)
       {
          case INITIALIZED:
+            {
             //printf( "INITIALIZED\n" );
             mState = RUNNING;
 
             getcontext( &mFuncJmp );
-            mFuncJmp.uc_stack.ss_sp = st1;
-            mFuncJmp.uc_stack.ss_size = sizeof st1;
-            mFuncJmp.uc_link = &mMainJmp;
-            makecontext(&mFuncJmp, (FunctionCast)mFunction, 1, arg);
+            mFuncJmp.uc_stack.ss_sp = st1+8; // pad
+            mFuncJmp.uc_stack.ss_size = sizeof( st1 ) - 64; // pad
+            //mFuncJmp.uc_link = &mMainJmp;
+            uint64_t z = arg;
+            uint32_t y = z;
+            z >>= 16;	/* hide undefined 32-bit shift from 32-bit compilers */
+            uint32_t x = z>>16;
+            makecontext(&mFuncJmp, (FunctionCast)mFunction, 2, y, x);
+            break;
+            }
+         case RUNNING:
             break;
          case DEAD:
             return 0;
@@ -236,20 +252,20 @@ static void Fiber(size_t arg)
    // wait 1000
    for (int x = 0; x < 1000; ++x)
    {
-      printf( "fiber waiting (id = %d)\n", arg );
+      printf( "fiber waiting (id = %ld)\n", arg );
       Microfiber::Yield(1000);
    }
 
    for (int x = 0; x < 1000; ++x)
    {
       // counts down...
-      printf( "fiber running (iter = %d id = %d)\n", ++i, arg );
+      printf( "fiber running (iter = %d id = %ld)\n", ++i, arg );
       Microfiber::Yield(0);
    }
 
    while (1)
    {
-      printf( "fiber waiting (id = %d)\n", arg );
+      printf( "fiber waiting (id = %ld)\n", arg );
       Microfiber::Yield(0);
    }
 }

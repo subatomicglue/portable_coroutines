@@ -7,6 +7,9 @@
 #ifdef WIN32
    // local version
 #  include "ucontext/ucontext.h"
+#  ifdef Yield
+#     undef Yield
+#  endif
 #elif defined(USE_NATIVE_UCONTEXT) && !defined(__APPLE__)
    // system version
 #  include <ucontext.h> // coredumps on APPLE... :(
