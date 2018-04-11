@@ -17,4 +17,4 @@ tarball:
 	mv ../coroutines.tgz .
 
 clean:
-	rm -fr a a2 jmp ucontext_test *.dSYM *.o
+	rm -fr a a2 jmp ucontext_test* *.dSYM *.o
