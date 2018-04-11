@@ -1,6 +1,6 @@
 # cross platform fibers/coroutines in c++
 here we present an example implementation for portable fibers/coroutines in c++.
-in this example, a class called `Microfiber` is implemented.
+in this example, a class called `Microfiber` is implemented (see [`main.cpp`](main.cpp)).
 
 [wikipedia (coroutine)](http://en.wikipedia.org/wiki/Coroutine):
 *"coroutines are program components that generalize
@@ -16,17 +16,26 @@ pre-emptive multitasking."*
 ## motivation
 our motivation here is to create a cooperatively multthreaded construct,
 that runs in a single thread...  that sounds strange, so let's explain.
-we want a system with hundreds of processes but no syncronization
-problems, and for each process to control how much time it gets (no
-preemption).
+we want a system with hundreds of "processes" (tasks really) but no
+syncronization problems, and for each process to control how much time
+it gets
 
-an obvious use-case for this would be game actors.  where each actor
+Benefits:
+- no preemption
+   - tasks context switch manually
+   - no syncronization to worry about - no semaphore/mutex/etc.
+- but just like with preemption
+   - switching can `yield` and `resume` in the middle of the task.
+- complete control over what thread the tasks run inside of
+
+One use-case for this would be game actors.  where each actor
 runs a function over the course of it's life time.  the 
 benefits are thus: the actor's update function simply runs over the
 lifetime of the game, over several frame updates. The function does not
-reenter, so there is no complex tracking of state to get back to where we left off last time the
-actor was serviced (common in systems that call actor.update() each
-frame for example).   
+need to reenter, so there is no complex tracking of state to get back to
+where we left off last time the actor was serviced (common in systems that
+call actor.update() each frame for example).
+
 
 ## dependencies
 
