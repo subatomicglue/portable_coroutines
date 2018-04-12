@@ -1,4 +1,5 @@
-# cross platform fibers/coroutines in c++
+# cross platform fibers/coroutines in c++ v1.0
+
 here we present an example implementation for portable fibers/coroutines in c++.
 in this example, a class called `Microfiber` is implemented (see [`main.cpp`](main.cpp)).
 
@@ -12,6 +13,13 @@ of execution at certain locations."*
 Like threads, fibers share address space; where a distinction exists, it
 is that fibers use co-operative multitasking while threads use
 pre-emptive multitasking."*
+
+NOTES (added 2018):
+- Since this released in 2008, there was a 2nd iteration beyond this (~2012), which you can find in [v2.0](coroutines-2.0)
+- Both are an exploration / example level code.
+- You might find them interesting.
+- There is always `Boost::Context`, which seems to do a production quality job of this.
+- Feel free to send pull requests / discuss in the issue tracker if you want to play.  This stuff is interesting.
 
 ## motivation
 our motivation here is to create a cooperatively multthreaded construct,

@@ -1,0 +1,55 @@
+/*
+ * picoro - minimal coroutines for C.
+ * Written by Tony Finch <dot@dotat.at>
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ * API modelled after Lua's coroutines
+ * http://www.lua.org/manual/5.1/manual.html#2.11
+ */
+
+#ifndef PICORO_H
+#define PICORO_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct coro coro;           /* fwd declare coro typename */
+typedef struct coro* corohandle;    /* coroutine handle */
+typedef void* (*corofunc)( void* ); /* function called by coroutine */
+typedef size_t (*corofunci)( size_t ); /* convenient convert */
+
+/*
+ * Create a coroutine that will run fun(). The coroutine starts off suspended.
+ * When it is first resumed, the argument to resume() is passed to fun().
+ * If fun() returns, its return value is returned by resume() as if the
+ * coroutine yielded, except that the coroutine is then no longer resumable
+ * and may be discarded.
+ */
+corohandle coroutine( corofunc fun, size_t stacksize );
+
+/*
+ * Returns false when the coroutine has run to completion
+ * or when it is blocked inside resume().
+ */
+int resumable( corohandle c );
+
+/*
+ * Transfer control to another coroutine. The second argument is returned by
+ * yield() inside the target coroutine (except for the first time resume() is
+ * called). A coroutine that is blocked inside resume() is not resumable.
+ */
+void* resume( corohandle c, void* arg );
+
+/*
+ * Transfer control back to the coroutine that resumed this one. The argument
+ * is returned by resume() in the destination coroutine. A coroutine that is
+ * blocked inside yield() may be resumed by any other coroutine.
+ */
+void* yield( void* arg );
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#endif /* PICORO_H */
