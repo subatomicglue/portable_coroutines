@@ -18,7 +18,7 @@ NOTES (added 2018):
 - Since this released in 2008, there was a 2nd iteration beyond this (~2012), which you can find in [v2.0](coroutines-2.0)
 - Both are an exploration / example level code.
 - You might find them interesting.
-- There is always `Boost::Context`, which seems to do a production quality job of this.
+- There is always [`Boost::Context`](https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/index.html), which seems to do a production quality job of this.
 - Feel free to send pull requests / discuss in the issue tracker if you want to play.  This stuff is interesting.
 
 ## motivation
