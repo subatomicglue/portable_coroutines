@@ -15,7 +15,7 @@ pre-emptive multitasking."*
 
 ## motivation
 our motivation here is to create a cooperatively multthreaded construct,
-that runs in a single thread...  that sounds strange, so let's explain.
+that runs in a single (system) thread...  that sounds strange, so let's explain.
 we want a system with hundreds of "processes" (tasks really) but no
 syncronization problems, and for each process to control how much time
 it gets
@@ -26,7 +26,7 @@ Benefits:
    - no syncronization to worry about - no semaphore/mutex/etc.
 - but just like with preemption
    - switching can `yield` and `resume` in the middle of the task.
-- complete control over what thread the tasks run inside of
+- complete control over what (system) thread the tasks run inside of
 
 One use-case for this would be game actors.  where each actor
 runs a function over the course of it's life time.  the 
